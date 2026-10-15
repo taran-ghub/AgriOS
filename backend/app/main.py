@@ -6,7 +6,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from backend.app.api.auth import router as auth_router
 from backend.app.api.crop_cycles import router as crop_cycles_router
 from backend.app.api.expenses import router as expenses_router
+from backend.app.api.harvests import router as harvests_router
 from backend.app.api.irrigation import router as irrigation_router
+from backend.app.api.sales import router as sales_router
+from backend.app.api.today import router as today_router
 from backend.app.database import create_tables
 
 
@@ -38,6 +41,9 @@ app.include_router(auth_router)
 app.include_router(crop_cycles_router)
 app.include_router(irrigation_router)
 app.include_router(expenses_router)
+app.include_router(harvests_router)
+app.include_router(sales_router)
+app.include_router(today_router)
 
 
 @app.get("/health", tags=["system"])
