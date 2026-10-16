@@ -1,9 +1,12 @@
 import { useState } from 'react'
 import TodayPanel from './TodayPanel'
+import WeatherPanel from './WeatherPanel'
+import OfficialPortalsPanel from './OfficialPortalsPanel'
 import IrrigationRecords from './IrrigationRecords'
 import ExpensePanel from './ExpensePanel'
 import HarvestPanel from './HarvestPanel'
 import SalesPanel from './SalesPanel'
+import ManageRecordsPanel from './ManageRecordsPanel'
 
 type Props = {
   cropCycleId: number
@@ -12,40 +15,52 @@ type Props = {
 
 type Section =
   | 'today'
+  | 'weather'
+  | 'portals'
   | 'irrigation'
   | 'expenses'
   | 'harvest'
   | 'sales'
+  | 'manage'
 
 const labels = {
   en: {
     heading: 'Overview and crop records',
     reminder: 'Save your entry before switching sections.',
     today: 'Today',
+    weather: 'Weather',
+    portals: 'Official portals',
     irrigation: 'Irrigation',
     expenses: 'Expenses',
     harvest: 'Harvest',
     sales: 'Sales',
+    manage: 'Manage records',
     scope: 'These records belong to the crop plan selected above.',
   },
   hi: {
     heading: 'सारांश और फसल के रिकॉर्ड',
     reminder: 'दूसरा भाग खोलने से पहले अपनी जानकारी सहेजें।',
     today: 'आज',
+    weather: 'मौसम',
+    portals: 'आधिकारिक पोर्टल',
     irrigation: 'सिंचाई',
     expenses: 'खर्च',
     harvest: 'कटाई',
     sales: 'बिक्री',
+    manage: 'रिकॉर्ड प्रबंधन',
     scope: 'ये रिकॉर्ड ऊपर चुनी गई फसल योजना के हैं।',
   },
 } as const
 
 const sections: Section[] = [
   'today',
+  'weather',
+  'portals',
   'irrigation',
   'expenses',
   'harvest',
   'sales',
+  'manage',
 ]
 
 export default function IrrigationPanel({
@@ -54,6 +69,8 @@ export default function IrrigationPanel({
 }: Props) {
   const [active, setActive] = useState<Section>('today')
   const t = labels[language]
+
+  const isCropRecord = !['today', 'weather', 'portals'].includes(active)
 
   return (
     <section style={{ marginTop: '28px' }}>
@@ -91,10 +108,18 @@ export default function IrrigationPanel({
         ))}
       </div>
 
-      {active !== 'today' && <p>{t.scope}</p>}
+      {isCropRecord && <p>{t.scope}</p>}
 
       {active === 'today' && (
         <TodayPanel language={language} />
+      )}
+
+      {active === 'weather' && (
+        <WeatherPanel language={language} />
+      )}
+
+      {active === 'portals' && (
+        <OfficialPortalsPanel language={language} />
       )}
 
       {active === 'irrigation' && (
@@ -124,6 +149,14 @@ export default function IrrigationPanel({
       {active === 'sales' && (
         <SalesPanel
           key={`sales-${cropCycleId}`}
+          cropCycleId={cropCycleId}
+          language={language}
+        />
+      )}
+
+      {active === 'manage' && (
+        <ManageRecordsPanel
+          key={`manage-${cropCycleId}`}
           cropCycleId={cropCycleId}
           language={language}
         />

@@ -8,8 +8,10 @@ from backend.app.api.crop_cycles import router as crop_cycles_router
 from backend.app.api.expenses import router as expenses_router
 from backend.app.api.harvests import router as harvests_router
 from backend.app.api.irrigation import router as irrigation_router
+from backend.app.api.records import router as records_router
 from backend.app.api.sales import router as sales_router
 from backend.app.api.today import router as today_router
+from backend.app.api.weather import router as weather_router
 from backend.app.database import create_tables
 
 
@@ -44,6 +46,8 @@ app.include_router(expenses_router)
 app.include_router(harvests_router)
 app.include_router(sales_router)
 app.include_router(today_router)
+app.include_router(weather_router)
+app.include_router(records_router)
 
 
 @app.get("/health", tags=["system"])
