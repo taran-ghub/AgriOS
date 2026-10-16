@@ -1,7 +1,9 @@
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from backend.app.api.auth import router as auth_router
 from backend.app.api.crop_cycles import router as crop_cycles_router
@@ -13,6 +15,10 @@ from backend.app.api.sales import router as sales_router
 from backend.app.api.today import router as today_router
 from backend.app.api.weather import router as weather_router
 from backend.app.database import create_tables
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+FRONTEND_DIST = PROJECT_ROOT / "frontend" / "dist"
 
 
 @asynccontextmanager
@@ -57,3 +63,12 @@ def health_check() -> dict[str, str]:
         "service": "agrios-api",
         "version": "0.1.0",
     }
+
+
+# Register this last so API routes take priority.
+if FRONTEND_DIST.is_dir():
+    app.mount(
+        "/",
+        StaticFiles(directory=str(FRONTEND_DIST), html=True),
+        name="frontend",
+    )
