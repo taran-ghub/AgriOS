@@ -4,7 +4,6 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-
 HarvestUnit = Literal["kg", "quintal"]
 
 
@@ -13,7 +12,7 @@ class HarvestCreate(BaseModel):
 
     quantity: Decimal = Field(
         gt=0,
-        le=Decimal("1000000"),
+        le=Decimal(1000000),
         max_digits=10,
         decimal_places=3,
         allow_inf_nan=False,

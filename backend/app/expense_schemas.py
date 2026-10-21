@@ -4,7 +4,6 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-
 ExpenseCategory = Literal[
     "seeds",
     "fertiliser",
@@ -24,7 +23,7 @@ class ExpenseCreate(BaseModel):
     # Input is in rupees. Accept at most two decimal places.
     amount: Decimal = Field(
         gt=0,
-        le=Decimal("10000000"),
+        le=Decimal(10000000),
         max_digits=10,
         decimal_places=2,
         allow_inf_nan=False,

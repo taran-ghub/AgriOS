@@ -10,7 +10,7 @@ class SaleCreate(BaseModel):
 
     quantity: Decimal = Field(
         gt=0,
-        le=Decimal("1000000"),
+        le=Decimal(1000000),
         max_digits=10,
         decimal_places=3,
         allow_inf_nan=False,
@@ -21,7 +21,7 @@ class SaleCreate(BaseModel):
     # Total value of this sale in rupees, not price per kg.
     total_value: Decimal = Field(
         gt=0,
-        le=Decimal("10000000"),
+        le=Decimal(10000000),
         max_digits=10,
         decimal_places=2,
         allow_inf_nan=False,

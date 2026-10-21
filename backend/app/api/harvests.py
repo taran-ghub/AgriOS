@@ -12,15 +12,14 @@ from backend.app.harvest_schemas import (
     HarvestRead,
 )
 
-
 router = APIRouter(
     prefix="/api/crop-cycles",
     tags=["harvests"],
 )
 
 GRAMS_PER_UNIT = {
-    "kg": Decimal("1000"),
-    "quintal": Decimal("100000"),
+    "kg": Decimal(1000),
+    "quintal": Decimal(100000),
 }
 
 
@@ -68,14 +67,9 @@ def get_harvests(
     ).all()
 
     return HarvestOverview(
-        total_recorded_grams=sum(
-            record.quantity_grams for record in records
-        ),
+        total_recorded_grams=sum(record.quantity_grams for record in records),
         record_count=len(records),
-        records=[
-            HarvestRead.model_validate(record)
-            for record in records
-        ],
+        records=[HarvestRead.model_validate(record) for record in records],
     )
 
 
@@ -102,9 +96,7 @@ def create_harvest(
             detail="Harvest date cannot be before the sowing date",
         )
 
-    quantity_grams = int(
-        payload.quantity * GRAMS_PER_UNIT[payload.unit]
-    )
+    quantity_grams = int(payload.quantity * GRAMS_PER_UNIT[payload.unit])
 
     record = HarvestRecord(
         crop_cycle_id=crop_cycle_id,

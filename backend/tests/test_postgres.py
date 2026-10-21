@@ -9,7 +9,6 @@ from sqlalchemy.orm import sessionmaker
 from backend.app.database import Base, get_db
 from backend.app.main import app
 
-
 TEST_DATABASE_URL = os.environ.get("TEST_DATABASE_URL")
 
 
@@ -54,15 +53,16 @@ def test_postgres_farm_workflow():
                 assert registration.status_code == 201, registration.text
 
                 headers = {
-                    "Authorization": (
-                        f"Bearer {registration.json()['access_token']}"
-                    )
+                    "Authorization": (f"Bearer {registration.json()['access_token']}")
                 }
 
-                assert client.get(
-                    "/api/auth/me",
-                    headers=headers,
-                ).status_code == 200
+                assert (
+                    client.get(
+                        "/api/auth/me",
+                        headers=headers,
+                    ).status_code
+                    == 200
+                )
 
                 created = client.post(
                     "/api/crop-cycles",

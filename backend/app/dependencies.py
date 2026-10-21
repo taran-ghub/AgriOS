@@ -12,7 +12,6 @@ from backend.app.browser_security import (
 from backend.app.database import get_db
 from backend.app.services.auth import get_user_for_token
 
-
 bearer = HTTPBearer(auto_error=False)
 
 DbSession = Annotated[Session, Depends(get_db)]

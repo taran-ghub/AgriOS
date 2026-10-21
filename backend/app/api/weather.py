@@ -9,7 +9,6 @@ from pydantic import BaseModel, ValidationError
 
 from backend.app.dependencies import CurrentUser
 
-
 router = APIRouter(
     prefix="/api/weather",
     tags=["weather"],
@@ -111,8 +110,7 @@ def search_locations(
     try:
         return LocationSearch(
             results=[
-                LocationResult.model_validate(item)
-                for item in data.get("results", [])
+                LocationResult.model_validate(item) for item in data.get("results", [])
             ]
         )
     except (ValidationError, TypeError):
@@ -135,15 +133,13 @@ def get_forecast(
         {
             "latitude": latitude,
             "longitude": longitude,
-            "daily": ",".join(
-                [
-                    "weather_code",
-                    "temperature_2m_min",
-                    "temperature_2m_max",
-                    "precipitation_probability_max",
-                    "precipitation_sum",
-                    "wind_speed_10m_max",
-                ]
+            "daily": (
+                "weather_code,"
+                "temperature_2m_min,"
+                "temperature_2m_max,"
+                "precipitation_probability_max,"
+                "precipitation_sum,"
+                "wind_speed_10m_max"
             ),
             "temperature_unit": "celsius",
             "wind_speed_unit": "kmh",

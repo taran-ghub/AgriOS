@@ -1,4 +1,3 @@
-# Build the React website.
 FROM node:24-bookworm-slim AS frontend-build
 
 WORKDIR /build/frontend
@@ -23,6 +22,7 @@ COPY backend/requirements-lock.txt /app/backend/requirements-lock.txt
 RUN pip install --no-cache-dir -r /app/backend/requirements-lock.txt
 
 COPY backend/ /app/backend/
+COPY alembic.ini /app/alembic.ini
 COPY --from=frontend-build /build/frontend/dist /app/frontend/dist
 
 RUN useradd --create-home --uid 10001 agrios \
@@ -32,4 +32,4 @@ USER agrios
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "exec uvicorn backend.app.main:app --host 0.0.0.0 --port \"${PORT}\""]
+CMD ["sh", "-c", "alembic upgrade head && exec uvicorn backend.app.main:app --host 0.0.0.0 --port \"${PORT}\""]

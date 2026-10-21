@@ -179,9 +179,7 @@ def test_login_and_logout(client: TestClient) -> None:
         json={"email": "FARMER@example.com", "password": "strong-pass-123"},
     )
     assert login_response.status_code == 200
-    headers = {
-        "Authorization": f"Bearer {login_response.json()['access_token']}"
-    }
+    headers = {"Authorization": f"Bearer {login_response.json()['access_token']}"}
     assert client.get("/api/auth/me", headers=headers).status_code == 200
     assert client.post("/api/auth/logout", headers=headers).status_code == 204
     assert client.get("/api/auth/me", headers=headers).status_code == 401

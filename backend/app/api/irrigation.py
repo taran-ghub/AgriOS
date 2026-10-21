@@ -9,7 +9,6 @@ from backend.app.irrigation_schemas import (
     IrrigationRead,
 )
 
-
 router = APIRouter(
     prefix="/api/crop-cycles",
     tags=["irrigation"],

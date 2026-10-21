@@ -12,7 +12,6 @@ from backend.app.expense_schemas import (
     ExpenseRead,
 )
 
-
 router = APIRouter(
     prefix="/api/crop-cycles",
     tags=["expenses"],
@@ -63,14 +62,9 @@ def get_expenses(
     ).all()
 
     return ExpenseOverview(
-        total_recorded_paise=sum(
-            record.amount_paise for record in records
-        ),
+        total_recorded_paise=sum(record.amount_paise for record in records),
         record_count=len(records),
-        records=[
-            ExpenseRead.model_validate(record)
-            for record in records
-        ],
+        records=[ExpenseRead.model_validate(record) for record in records],
     )
 
 
@@ -91,7 +85,7 @@ def create_expense(
         crop_cycle_id=crop_cycle_id,
         expense_date=payload.expense_date,
         category=payload.category,
-        amount_paise=int(payload.amount * Decimal("100")),
+        amount_paise=int(payload.amount * Decimal(100)),
         notes=payload.notes,
     )
 

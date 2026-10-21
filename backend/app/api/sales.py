@@ -14,15 +14,14 @@ from backend.app.sale_schemas import (
     SalesOverview,
 )
 
-
 router = APIRouter(
     prefix="/api/crop-cycles",
     tags=["sales"],
 )
 
 GRAMS_PER_UNIT = {
-    "kg": Decimal("1000"),
-    "quintal": Decimal("100000"),
+    "kg": Decimal(1000),
+    "quintal": Decimal(100000),
 }
 
 
@@ -70,8 +69,9 @@ def get_sales(
     ).all()
 
     expenses = session.scalar(
-        select(func.coalesce(func.sum(Expense.amount_paise), 0))
-        .where(Expense.crop_cycle_id == crop_cycle_id)
+        select(func.coalesce(func.sum(Expense.amount_paise), 0)).where(
+            Expense.crop_cycle_id == crop_cycle_id
+        )
     )
 
     harvested = session.scalar(
@@ -98,10 +98,7 @@ def get_sales(
         harvest_minus_sales_grams=total_harvested - total_sold,
         sales_exceed_recorded_harvest=total_sold > total_harvested,
         record_count=len(records),
-        records=[
-            SaleRead.model_validate(record)
-            for record in records
-        ],
+        records=[SaleRead.model_validate(record) for record in records],
     )
 
 
@@ -131,12 +128,8 @@ def create_sale(
     record = SaleRecord(
         crop_cycle_id=crop_cycle_id,
         sale_date=payload.sale_date,
-        quantity_grams=int(
-            payload.quantity * GRAMS_PER_UNIT[payload.unit]
-        ),
-        total_value_paise=int(
-            payload.total_value * Decimal("100")
-        ),
+        quantity_grams=int(payload.quantity * GRAMS_PER_UNIT[payload.unit]),
+        total_value_paise=int(payload.total_value * Decimal(100)),
         notes=payload.notes,
     )
 

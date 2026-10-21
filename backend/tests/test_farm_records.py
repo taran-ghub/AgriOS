@@ -64,9 +64,7 @@ def account(client: TestClient, email: str) -> dict[str, str]:
 
     assert response.status_code == 201, response.text
 
-    return {
-        "Authorization": f"Bearer {response.json()['access_token']}"
-    }
+    return {"Authorization": f"Bearer {response.json()['access_token']}"}
 
 
 def crop_plan(client: TestClient, headers: dict[str, str]) -> dict:
@@ -255,11 +253,14 @@ def test_other_account_cannot_read_or_add_records(client: TestClient):
 
         assert client.get(url, headers=other).status_code == 404
 
-        assert client.post(
-            url,
-            headers=other,
-            json=payload,
-        ).status_code == 404
+        assert (
+            client.post(
+                url,
+                headers=other,
+                json=payload,
+            ).status_code
+            == 404
+        )
 
     plans = client.get("/api/crop-cycles", headers=other)
     assert plans.status_code == 200
@@ -319,11 +320,11 @@ def test_today_groups_dates_and_excludes_other_accounts(client: TestClient):
         assert response.status_code == 200
 
     changes = [
-        ("2026-04-09", "pending"),     # Overdue
-        ("2026-04-10", "pending"),     # Today
-        ("2026-04-17", "postponed"),   # Seventh day: included
-        ("2026-04-18", "pending"),     # Beyond seven days: excluded
-        ("2026-04-10", "skipped"),     # Skipped: excluded
+        ("2026-04-09", "pending"),  # Overdue
+        ("2026-04-10", "pending"),  # Today
+        ("2026-04-17", "postponed"),  # Seventh day: included
+        ("2026-04-18", "pending"),  # Beyond seven days: excluded
+        ("2026-04-10", "skipped"),  # Skipped: excluded
     ]
 
     for task, (due_date, task_status) in zip(

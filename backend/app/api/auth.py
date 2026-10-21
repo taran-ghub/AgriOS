@@ -22,7 +22,6 @@ from backend.app.services.auth import (
     verify_password,
 )
 
-
 router = APIRouter(prefix="/api/auth", tags=["authentication"])
 
 
@@ -65,9 +64,7 @@ def authenticate_user(
     payload: schemas.AuthCredentials,
     session: DbSession,
 ) -> models.User:
-    user = session.scalar(
-        select(models.User).where(models.User.email == payload.email)
-    )
+    user = session.scalar(select(models.User).where(models.User.email == payload.email))
 
     if user is None or not verify_password(
         payload.password,
@@ -82,6 +79,7 @@ def authenticate_user(
 
 
 # Explicit bearer-token endpoints for API clients and existing tests.
+
 
 @router.post(
     "/register",
@@ -143,6 +141,7 @@ def logout(
 
 
 # Browser endpoints return user information, never the session token.
+
 
 @router.post(
     "/session/register",

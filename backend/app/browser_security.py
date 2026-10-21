@@ -4,7 +4,6 @@ from fastapi import HTTPException, Request, Response
 
 from backend.app.services.auth import SESSION_LIFETIME
 
-
 COOKIE_NAME = "agrios_session"
 COOKIE_PATH = "/api"
 

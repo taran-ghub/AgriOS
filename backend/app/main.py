@@ -16,7 +16,6 @@ from backend.app.api.today import router as today_router
 from backend.app.api.weather import router as weather_router
 from backend.app.database import create_tables
 
-
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 FRONTEND_DIST = PROJECT_ROOT / "frontend" / "dist"
 

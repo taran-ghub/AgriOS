@@ -11,7 +11,6 @@ from backend.app.today_schemas import (
     TodayTask,
 )
 
-
 router = APIRouter(
     prefix="/api",
     tags=["today"],

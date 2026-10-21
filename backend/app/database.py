@@ -6,14 +6,9 @@ from sqlalchemy import create_engine, event
 from sqlalchemy.engine import make_url
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
+DEFAULT_DATABASE_PATH = Path(__file__).resolve().parents[1] / "agrios.db"
 
-DEFAULT_DATABASE_PATH = (
-    Path(__file__).resolve().parents[1] / "agrios.db"
-)
-
-DEFAULT_DATABASE_URL = (
-    f"sqlite:///{DEFAULT_DATABASE_PATH.as_posix()}"
-)
+DEFAULT_DATABASE_URL = f"sqlite:///{DEFAULT_DATABASE_PATH.as_posix()}"
 
 DATABASE_URL = os.environ.get(
     "DATABASE_URL",
@@ -66,11 +61,13 @@ if is_sqlite:
 
 def create_tables() -> None:
     # Import every model so all tables are registered before creation.
-    from backend.app import models  # noqa: F401
-    from backend.app import expense_models  # noqa: F401
-    from backend.app import harvest_models  # noqa: F401
-    from backend.app import irrigation_models  # noqa: F401
-    from backend.app import sale_models  # noqa: F401
+    from backend.app import (
+        expense_models,  # noqa: F401
+        harvest_models,  # noqa: F401
+        irrigation_models,  # noqa: F401
+        models,  # noqa: F401
+        sale_models,  # noqa: F401
+    )
 
     Base.metadata.create_all(bind=engine)
 

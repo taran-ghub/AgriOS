@@ -10,7 +10,6 @@ from backend.app.browser_security import COOKIE_NAME
 from backend.app.database import Base, get_db
 from backend.app.main import app
 
-
 ORIGIN = "http://localhost:5173"
 BROWSER_HEADERS = {"Origin": ORIGIN}
 

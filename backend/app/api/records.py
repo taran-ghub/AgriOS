@@ -10,7 +10,6 @@ from backend.app.harvest_models import HarvestRecord
 from backend.app.irrigation_models import IrrigationRecord
 from backend.app.sale_models import SaleRecord
 
-
 router = APIRouter(
     prefix="/api/crop-cycles",
     tags=["record management"],
@@ -63,8 +62,7 @@ def delete_record(
 
     # Also verify that the record belongs to this exact crop plan.
     record = session.scalar(
-        select(record_model)
-        .where(
+        select(record_model).where(
             record_model.id == record_id,
             record_model.crop_cycle_id == crop_cycle_id,
         )
