@@ -10,13 +10,25 @@ AgriOS is a multilingual, mobile-first farm operations assistant. It helps users
 
 ## Product preview
 
-| Field and crop setup | Today’s tasks |
-|---|---|
-| ![Field creation](docs/screenshots/01-field-creation.png) | ![Today's tasks](docs/screenshots/02-today-tasks.png) |
+### Field and crop setup
 
-| Farm records | Mobile interface |
-|---|---|
-| ![Farm records](docs/screenshots/03-farm-records.png) | ![Mobile view](docs/screenshots/04-mobile-view.png) |
+![AgriOS field creation](docs/screenshots/01-field-creation.png)
+
+### Farm overview
+
+![AgriOS farm overview](docs/screenshots/02-overview.png)
+
+### Today’s tasks
+
+![AgriOS today tasks](docs/screenshots/03-today-tasks.png)
+
+### Expense tracking
+
+![AgriOS farm expenses](docs/screenshots/04-farm-expenses.png)
+
+### Mobile interface
+
+<img src="docs/screenshots/05-mobile-view.png" alt="AgriOS mobile interface" width="360">
 
 ## Features
 
