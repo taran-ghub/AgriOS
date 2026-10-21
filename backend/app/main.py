@@ -1,9 +1,11 @@
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from sqlalchemy import text
+from sqlalchemy.exc import SQLAlchemyError
 
 from backend.app.api.auth import router as auth_router
 from backend.app.api.crop_cycles import router as crop_cycles_router
@@ -14,7 +16,7 @@ from backend.app.api.records import router as records_router
 from backend.app.api.sales import router as sales_router
 from backend.app.api.today import router as today_router
 from backend.app.api.weather import router as weather_router
-from backend.app.database import create_tables
+from backend.app.database import create_tables, engine
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 FRONTEND_DIST = PROJECT_ROOT / "frontend" / "dist"
@@ -57,6 +59,12 @@ app.include_router(records_router)
 
 @app.get("/health", tags=["system"])
 def health_check() -> dict[str, str]:
+    """
+    Liveness check.
+
+    This confirms that the FastAPI process is running and able to respond.
+    It does not contact the database.
+    """
     return {
         "status": "healthy",
         "service": "agrios-api",
@@ -64,7 +72,39 @@ def health_check() -> dict[str, str]:
     }
 
 
-# Register this last so API routes take priority.
+@app.get(
+    "/health/ready",
+    tags=["system"],
+    responses={
+        503: {
+            "description": "The application cannot currently reach its database",
+        }
+    },
+)
+def readiness_check() -> dict[str, str]:
+    """
+    Readiness check.
+
+    This confirms that the API can execute a small query against the
+    configured SQLite or PostgreSQL database.
+    """
+    try:
+        with engine.connect() as connection:
+            connection.execute(text("SELECT 1"))
+    except SQLAlchemyError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="Database connection unavailable",
+        ) from exc
+
+    return {
+        "status": "ready",
+        "service": "agrios-api",
+        "database": "connected",
+    }
+
+
+# Register this last so API routes take priority over frontend files.
 if FRONTEND_DIST.is_dir():
     app.mount(
         "/",
